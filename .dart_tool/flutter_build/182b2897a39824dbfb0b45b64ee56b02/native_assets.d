@@ -1,0 +1,1 @@
+ /Users/yara/Desktop/mine/goal_tracker/.dart_tool/flutter_build/182b2897a39824dbfb0b45b64ee56b02/native_assets.yaml: 
