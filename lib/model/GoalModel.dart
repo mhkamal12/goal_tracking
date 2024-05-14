@@ -6,6 +6,7 @@ class GoalModel {
   final String? description;
   final String date;
   final int priority;
+  final int progress ;
 
   GoalModel({
     required this.id,
@@ -13,6 +14,7 @@ class GoalModel {
     this.description,
     required this.date,
     required this.priority,
+    required this.progress,
   });
 
   Map<String, dynamic> toMap() {
@@ -22,6 +24,7 @@ class GoalModel {
       'description': description,
       'date': date,
       'priority': priority,
+      'progress': progress,
     };
   }
 
@@ -36,6 +39,7 @@ class GoalModel {
       description: map['description'],
       date: dateFormatted,
       priority: map['priority'],
+      progress: map['progress'],
     );
   }
 }
