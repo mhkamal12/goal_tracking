@@ -19,8 +19,9 @@ class _AddOrUpdateGoalScreenState extends State<AddOrUpdateGoalScreen> {
   final TextEditingController descriptionController = TextEditingController();
   int priority = 1;
   DateTime? date;
+  double progress = 0;
 
-  final _formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -33,6 +34,7 @@ class _AddOrUpdateGoalScreenState extends State<AddOrUpdateGoalScreen> {
         descriptionController.text = widget.goal!.description ?? '';
         priority = widget.goal!.priority;
         date = theDate;
+        progress = widget.goal!.progress.toDouble();
       });
     }
     super.initState();
@@ -81,7 +83,7 @@ class _AddOrUpdateGoalScreenState extends State<AddOrUpdateGoalScreen> {
         body: SafeArea(
           top: true,
           child: Form(
-            key: _formKey,
+            key: formKey,
             autovalidateMode: AutovalidateMode.disabled,
             child: Column(
               mainAxisSize: MainAxisSize.max,
@@ -99,163 +101,191 @@ class _AddOrUpdateGoalScreenState extends State<AddOrUpdateGoalScreen> {
                               maxWidth: 770,
                             ),
                             decoration: BoxDecoration(),
-                            child: Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: 50,
-                                    child: TextFormField(
-                                      controller: titleController,
-                                      textCapitalization:
-                                          TextCapitalization.words,
-                                      obscureText: false,
-                                      decoration: InputDecoration(
-                                        labelText: 'Task...',
-                                        contentPadding:
-                                            EdgeInsetsDirectional.fromSTEB(
-                                                16, 0, 16, 0),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 20),
-                                  TextFormField(
-                                    controller: descriptionController,
-                                    textCapitalization:
-                                        TextCapitalization.words,
-                                    obscureText: false,
-                                    decoration: InputDecoration(
-                                      labelText: 'Description...',
-                                      alignLabelWithHint: true,
-                                      contentPadding:
-                                          EdgeInsetsDirectional.fromSTEB(
-                                              16, 16, 16, 16),
-                                    ),
-                                    maxLines: 9,
-                                    minLines: 5,
-                                  ),
-                                  const SizedBox(height: 20),
-                                  Text('Priority'),
-                                  Container(
-                                    width:
-                                        MediaQuery.sizeOf(context).width - 40,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                        width: 2,
-                                        color: Theme.of(context)
-                                            .inputDecorationTheme
-                                            .enabledBorder!
-                                            .borderSide
-                                            .color,
-                                      ),
-                                    ),
-                                    child: DropdownButton<int>(
-                                      onChanged: (val) {
-                                        setState(() {
-                                          priority = val!;
-                                        });
-                                      },
-                                      value: priority,
-                                      icon: Icon(
-                                        Icons.keyboard_arrow_down_rounded,
-                                        size: 24,
-                                      ),
-                                      isExpanded: true,
-                                      elevation: 2,
-                                      dropdownColor: Theme.of(context)
-                                          .scaffoldBackgroundColor,
-                                      underline: const SizedBox(),
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10),
-                                      hint: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 10),
-                                        child: Text(
-                                          'Select level of priority',
-                                          style: TextStyle(
-                                              fontSize: 14, color: Colors.grey),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      16, 12, 16, 0),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        height: 50,
+                                        child: TextFormField(
+                                          controller: titleController,
+                                          textCapitalization:
+                                              TextCapitalization.words,
+                                          obscureText: false,
+                                          decoration: InputDecoration(
+                                            labelText: 'Task...',
+                                            contentPadding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    16, 0, 16, 0),
+                                          ),
                                         ),
                                       ),
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(8)),
-                                      items: [
-                                        DropdownMenuItem(
-                                          value: 1,
-                                          child: Text('Low'),
-                                        ),
-                                        DropdownMenuItem(
-                                          value: 2,
-                                          child: Text('Medium'),
-                                        ),
-                                        DropdownMenuItem(
-                                          value: 3,
-                                          child: Text('High'),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(height: 20),
-                                  Text('Date'),
-                                  InkWell(
-                                    onTap: () async {
-                                      final _datePickedDate =
-                                          await showDatePicker(
-                                        context: context,
-                                        initialDate: DateTime.now(),
-                                        firstDate: DateTime.now(),
-                                        lastDate: DateTime(2050),
-                                      );
-
-                                      if (_datePickedDate != null) {
-                                        setState(() {
-                                          date = _datePickedDate;
-                                        });
-                                      }
-                                    },
-                                    child: Container(
-                                      width: double.infinity,
-                                      height: 48,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(12),
-                                        border: Border.all(
-                                          width: 2,
-                                          color: Theme.of(context)
-                                              .inputDecorationTheme
-                                              .enabledBorder!
-                                              .borderSide
-                                              .color,
-                                        ),
-                                      ),
-                                      child: Align(
-                                        alignment: AlignmentDirectional(-1, 0),
-                                        child: Padding(
-                                          padding:
+                                      const SizedBox(height: 20),
+                                      TextFormField(
+                                        controller: descriptionController,
+                                        textCapitalization:
+                                            TextCapitalization.words,
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          labelText: 'Description...',
+                                          alignLabelWithHint: true,
+                                          contentPadding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  12, 0, 0, 0),
-                                          child: Text(
-                                            date != null
-                                                ? formatDate(date!)
-                                                : 'Select a date',
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              color: date == null
-                                                  ? Colors.grey
-                                                  : Theme.of(context)
-                                                      .textTheme
-                                                      .bodyMedium
-                                                      ?.color,
+                                                  16, 16, 16, 16),
+                                        ),
+                                        maxLines: 9,
+                                        minLines: 5,
+                                      ),
+                                      const SizedBox(height: 20),
+                                      Text('Priority'),
+                                      Container(
+                                        width:
+                                            MediaQuery.sizeOf(context).width -
+                                                40,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          border: Border.all(
+                                            width: 2,
+                                            color: Theme.of(context)
+                                                .inputDecorationTheme
+                                                .enabledBorder!
+                                                .borderSide
+                                                .color,
+                                          ),
+                                        ),
+                                        child: DropdownButton<int>(
+                                          onChanged: (val) {
+                                            setState(() {
+                                              priority = val!;
+                                            });
+                                          },
+                                          value: priority,
+                                          icon: Icon(
+                                            Icons.keyboard_arrow_down_rounded,
+                                            size: 24,
+                                          ),
+                                          isExpanded: true,
+                                          elevation: 2,
+                                          dropdownColor: Theme.of(context)
+                                              .scaffoldBackgroundColor,
+                                          underline: const SizedBox(),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10),
+                                          hint: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            child: Text(
+                                              'Select level of priority',
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Colors.grey),
+                                            ),
+                                          ),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(8)),
+                                          items: [
+                                            DropdownMenuItem(
+                                              value: 1,
+                                              child: Text('Low'),
+                                            ),
+                                            DropdownMenuItem(
+                                              value: 2,
+                                              child: Text('Medium'),
+                                            ),
+                                            DropdownMenuItem(
+                                              value: 3,
+                                              child: Text('High'),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(height: 20),
+                                      Text('Date'),
+                                      InkWell(
+                                        onTap: () async {
+                                          final _datePickedDate =
+                                              await showDatePicker(
+                                            context: context,
+                                            initialDate: DateTime.now(),
+                                            firstDate: DateTime.now(),
+                                            lastDate: DateTime(2050),
+                                          );
+
+                                          if (_datePickedDate != null) {
+                                            setState(() {
+                                              date = _datePickedDate;
+                                            });
+                                          }
+                                        },
+                                        child: Container(
+                                          width: double.infinity,
+                                          height: 48,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            border: Border.all(
+                                              width: 2,
+                                              color: Theme.of(context)
+                                                  .inputDecorationTheme
+                                                  .enabledBorder!
+                                                  .borderSide
+                                                  .color,
+                                            ),
+                                          ),
+                                          child: Align(
+                                            alignment:
+                                                AlignmentDirectional(-1, 0),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(12, 0, 0, 0),
+                                              child: Text(
+                                                date != null
+                                                    ? formatDate(date!)
+                                                    : 'Select a date',
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: date == null
+                                                      ? Colors.grey
+                                                      : Theme.of(context)
+                                                          .textTheme
+                                                          .bodyMedium
+                                                          ?.color,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                ),
+                                const SizedBox(height: 20),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: Text('Progress'),
+                                ),
+                                Slider(
+                                  value: progress,
+                                  min: 0,
+                                  max: 100,
+                                  label: progress.round().toString(),
+                                  divisions: 10,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      progress = value;
+                                    });
+                                  },
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -275,7 +305,7 @@ class _AddOrUpdateGoalScreenState extends State<AddOrUpdateGoalScreen> {
                       onPressed: () async {
                         try {
                           FocusScope.of(context).unfocus();
-                          if (!_formKey.currentState!.validate() ||
+                          if (!formKey.currentState!.validate() ||
                               date == null) {
                             return;
                           }
@@ -288,6 +318,7 @@ class _AddOrUpdateGoalScreenState extends State<AddOrUpdateGoalScreen> {
                               'title': titleController.text,
                               'description': descriptionController.text,
                               'priority': priority,
+                              'progress': progress.round(),
                               'date': date!.toIso8601String(),
                             }).then((value) {
                               Navigator.pop(context, true);
@@ -301,6 +332,7 @@ class _AddOrUpdateGoalScreenState extends State<AddOrUpdateGoalScreen> {
                                       'title': titleController.text,
                                       'description': descriptionController.text,
                                       'priority': priority,
+                                      'progress': progress.round(),
                                       'date': date!.toIso8601String(),
                                     },
                                     where: 'id = ?',
