@@ -14,6 +14,9 @@ ThemeData lightThemeData() {
       ),
       listTileTheme: const ListTileThemeData(
         tileColor: Color.fromARGB(255, 243, 243, 243),
+        titleTextStyle: TextStyle(color: Colors.black),
+        subtitleTextStyle: TextStyle(color: Colors.black),
+        textColor: Colors.black,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0)),
         ),
@@ -105,6 +108,11 @@ ThemeData darkThemeData() {
       ),
       listTileTheme: const ListTileThemeData(
         tileColor: Color.fromARGB(255, 18, 18, 18),
+        iconColor: Colors.red,
+        textColor: Colors.white,
+        
+        titleTextStyle: TextStyle(color: Colors.white),
+        subtitleTextStyle: TextStyle(color: Colors.white),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0)),
         ),
