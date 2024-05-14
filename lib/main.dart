@@ -14,7 +14,6 @@ void main() async {
         return ThemeProvider();
       },
       child: const MyApp()));
-
 }
 
 // Function to initialize the database
@@ -28,11 +27,9 @@ Future<void> initializeDatabase() async {
     // If the database doesn't exist, create it
     print("Creating new database...");
     await openDatabase(path, version: 1, onCreate: (db, version) {
-
-
       // Create the table
       return db.execute(
-        'CREATE TABLE todos(id INTEGER PRIMARY KEY, title TEXT, description TEXT , priority INTEGER, date TEXT)',
+        'CREATE TABLE todos(id INTEGER PRIMARY KEY, title TEXT, description TEXT , priority INTEGER, date TEXT, progress INTEGER)',
       );
     });
     print("Database created!");
